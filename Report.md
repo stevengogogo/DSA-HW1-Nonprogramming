@@ -42,6 +42,54 @@ $$
 $$
 
 
+### 4. (10pt)
+
+Becsue $f(n)$ and $g(n)$ are positively define for $n$ as a positive integer:
+
+$$ 0 \leq max(f(n) + g(n)) \leq  f(n) + g(n) \leq 2\cdot max(f(n) + g(n))$$
+
+for any $n\geq 1$.
+
+We can find a $c_1\geq2$, such that fullfill the inequality:
+
+   $$f(n) + g(n) \leq c_1 max(f(n)+g(n))$$
+
+And also a $c_2 \leq 1$, satisfies
+
+$$c_2 max(f(n)+ g(n)) \leq f(n) + g(n)$$
+
+for all $n\geq 1$. Therefore, the euqlity holds by applying the definition of $\Theta(n)$ [^ITA_theta]
+
+
+
+### 5. (10pt)
+
+Because $f(n) = O(i(n))$ and $g(n) = O(j(n))$, there exist two integers $n_1$, $n_2$ and two constants $c_1$, $c_2$ that satisfy the inequalities:
+
+<center>
+
+$f(n) \leq c_1 i(n_1)$ and $g(n) \leq c_2 j(n_2)$
+
+</center>
+
+
+Let $n_0 = max(n_1, n_2)$ and  $c_0 = c_1c_2$. Consider the equation $f(n)\cdot g(n)$:
+
+$$f(n) \cdot g(n) \leq c_1 i(n) \cdot c_2 j(n) \leq c_0 i(n)j(n)$$ 
+
+for all $n\geq n_0$. Thus $f(n)\cdot g(n) \leq O(i(n)\cdot j(n))_{\#}$ [^prop_o].
+
+### 6. (10pt)
+
+The statement is **false**. Here is a contradictory  example:
+
+Let $f(n) = 2 \log_{2} n$ ; $g(n) = \log_{2} n$. This example satisfy the condition, $f(n) = O(g(n))$. However, when apply this example in the power of 2. We can find that $2^{f(n)} = 2^{ 2 \log_{2} n} = n^2$, and $2^{g(n)} = n$[^log]. Therefore, in this case, $2^{f(n)} \notin O(2^{g(n)})_{\#}$.
+
+
+
+
+
+
 
 ## Code
 
@@ -58,7 +106,7 @@ int a;
 ## Citation
 
 
-Something important [^1][^3].
+Something important 
 
 ## Equations
 
@@ -71,6 +119,6 @@ $$
 
 
 [^master]: Time complexity of recursive functions [Master theorem]. https://yourbasic.org/algorithms/time-complexity-recursive-functions/
-
-[^1]: Citation 1
-[^3]: Auto indexing
+[^ITA_theta]: Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (n.d.). Introduction to Algorithms, Third Edition. pp.44-47
+[^prop_o]: Properties of Big-O. Data Structures and Algorithms with Object-Oriented Design Patterns in Java. [[Link](https://book.huihoo.com/data-structures-and-algorithms-with-object-oriented-design-patterns-in-java/html/page62.html)]
+[^log]: $b^{\log_b p} = p$. see [log equalities](https://ducdoan.com/wp-content/uploads/2018/12/2.jpg).
