@@ -39,3 +39,7 @@ Template for createing report PDF with Markdown Preview Enhanced
 > Discussions on course materials and homework solutions are encouraged. But you should write the final solutions alone and understand them fully. Books, notes, and Internet resources can be consulted, but not copied from. For each non-programming problem, you have to specify the references (the Internet URL you consulted with or the people you
 
 > Discussed with) on the first page of your solution for that problem; for each programming problem, you have to specify the references on the first lines (comments) of your code (main.c) for that problem.
+
+
+## Notes
+
