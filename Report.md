@@ -85,11 +85,106 @@ The statement is **false**. Here is a contradictory  example:
 
 Let $f(n) = 2 \log_{2} n$ ; $g(n) = \log_{2} n$. This example satisfy the condition, $f(n) = O(g(n))$. However, when apply this example in the power of 2. We can find that $2^{f(n)} = 2^{ 2 \log_{2} n} = n^2$, and $2^{g(n)} = n$[^log]. Therefore, in this case, $2^{f(n)} \notin O(2^{g(n)})_{\#}$.
 
-### 7. (10pt)
+### 7. (10pt) The harmonic series
+
+Strategy: **Approximation by Integrals** [^ITA_1154]
+
+Let $f(k) = \frac{1}{k}$, which is a **monotonically decreasing function**. We can find the bounds
+
+$$\int_{m}^{n+1} f(x)dx \leq \sum_{k=m}^{n} \frac{1}{k} \leq \int_{m-1}^{n} f(x) dx$$
+
+For a **lower bound**,
+
+$$\sum_{k=1}^{n} \frac{1}{k} \geq \sum^{n+1}_{1} \frac{1}{x} dx = \ln(n+1)$$
+
+For a **upper bound**,
+
+
+$$ \begin{align*} 
+\sum_{k=2}^{n} \frac{1}{k} + 1 & \leq \int_{1}^{n} \frac{1}{x} dx + 1\\
+                   & = \ln(n) + 1
+\end{align*}$$
+
+In summary,
+
+$$\ln(n+1) \leq \sum_{k=1}^{n} \frac{1}{k} \leq \ln(n)+1$$
+
+We need to find constants $c_1$ and $c_2$ that can include bounds by multply with $\ln(n)$.
+
+- Lower bound:  $\ln(n+1) > 1 \cdot ln(n)$
+  - where $c_1 = 1$ for $n \geq 1$
+- Upper bound: $\ln(n) + 1 = \ln(e\cdot n) < 2\cdot \ln(n)$
+  - where $c_2 = 2$ for  $n > e$
+
+Therefore,
+
+$$0\leq \ln(n) \leq \sum_{k=1}^{n} \frac{1}{k} \leq 2\ln(n)$$
+
+for all $n>e$. By $\Theta$ notatoin: $\sum^{n}_{k=1} \frac{1}{k} = \Theta(\ln n) = \Theta(\frac{\log n}{\log e}) = \Theta(\log n)_{\#}$
 
 
 
+### 8. (10pts) $\log(n!) = \Theta(n\log n)$
 
+The equation can be expanded
+
+$$\log(n!) = \log(n) + \log(n-1) + \cdots + \log(1)$$
+
+We can find the upper bound by setting all the terms as $\log(n)$, and get
+
+$$\log(n!) \leq n\log(n)$$
+
+On the other hand, $\log(n!)$ can be expanded 
+
+$$\log(n!) = \log(n * (n-1) * (n-1) * \cdots * 1) $$
+
+By removing half of elements,
+
+$$\begin{align*}
+  \log(n!) &\geq \log(n*(n-1)*\cdots*(\frac{n}{2})) \\
+           &\geq \log((\frac{n}{2})^{\frac{n}{2}}) = \frac{n}{2} \log(\frac{n}{2})
+\end{align*}$$
+
+The relation between $n\log(n)$ and $\frac{n}{2} \log(\frac{n}{2})$ can be further explained
+
+$$\frac{n}{2}\log(\frac{n}{2}) = \frac{n}{2}(\log(n) - 1)$$
+
+We need to find a $c$ that fullfills the following inequality:
+
+$$c\cdot n\log(n) \leq \frac{n}{2}\log(\frac{n}{2}) $$
+
+
+For $n\geq 4$,
+
+$$\begin{align*}
+  \log n &\geq 2 \\
+  \frac{1}{4} \log n   &\geq  \frac{1}{2} \\
+  \frac{1}{4} \log n - \frac{1}{2} &\geq 0 \\
+  \frac{1}{4} n \log n - \frac{1}{2} n &\geq 0 
+\end{align*}$$
+
+Add $\frac{1}{4}n\log n$ on both sides:
+
+$$\frac{1}{2} n\log n - \frac{1}{2}n \geq \frac{1}{4} n\log n$$
+
+Recall the lower bound
+
+$$ \begin{align*}
+  \log(n!) &\geq \frac{n}{2} \log(\frac{n}{2}) \\
+           &\geq \frac{1}{4} n\log n
+\end{align*}$$
+
+for all $n\geq 4$.
+
+In conclusion,
+
+
+$$0\leq \frac{1}{4}n\log(n) \leq \log(n!) \leq n\log(n)$$
+
+for all $n\geq 4$. The $\Theta(n!) = n\log(n)_{\#}$
+
+
+## 9. (10pts)
 
 
 ## Code
@@ -123,3 +218,4 @@ $$
 [^ITA_theta]: Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (n.d.). Introduction to Algorithms, Third Edition. pp.44-47
 [^prop_o]: Properties of Big-O. Data Structures and Algorithms with Object-Oriented Design Patterns in Java. [[Link](https://book.huihoo.com/data-structures-and-algorithms-with-object-oriented-design-patterns-in-java/html/page62.html)]
 [^log]: $b^{\log_b p} = p$. see [log equalities](https://ducdoan.com/wp-content/uploads/2018/12/2.jpg).
+[^ITA_1154]: Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (n.d.). Introduction to Algorithms, Third Edition. pp.1154-1156.
