@@ -7,14 +7,6 @@ puppeteer:
     puppeteer: true # export PDF on save
     puppeteer: ["pdf"] # export PDF and PNG files on save
 ---
-<center>
-
-# Report
-
-邱紹庭
-r07945001@ntu.edu.tw
-
-</center>
 
 
 ## Problem 1
@@ -97,7 +89,7 @@ For a **lower bound**,
 
 $$\sum_{k=1}^{n} \frac{1}{k} \geq \sum^{n+1}_{1} \frac{1}{x} dx = \ln(n+1)$$
 
-For a **upper bound**,
+For an **upper bound**,
 
 
 $$ \begin{align*} 
@@ -189,7 +181,7 @@ for all $n\geq 4$. The $\Theta(n!) = n\log(n)_{\#}$
 令 $g(n) = n\log n$.
 每一個 $f(n)$ 都會產生 $2$ 個 $f(n-1)$. 直到  $\lfloor \frac{n}{2} \rfloor = 1$ 總計會產生 $n^{\log_2 2}$ 個 $\Theta(1)$ operations 在 leaves. 在分支的過程中, 會產生 $\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})$ 個 operation 在 roots[^master_tree]. 所以可以得到以下關係
 
-$$f(n) = \underbrace{\Theta(n^{\log_2 2})}_{Leaves} + \underbrace{\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})}_{Roots}$$
+$$f(n) = \underbrace{\Theta(n^{\log_2 2})}_{Leaves} + \underbrace{\sum_{j=0}^{\lfloor \log_2 n - 1 \rfloor} 2^j g(\frac{n}{2^j})}_{Roots}$$
 
 
 已知 $g(n) = \Theta(n\log n)$, 接下來比較 $2 g(\frac{n}{2})$ 和 $g(n)$ 的 complexity:
@@ -216,15 +208,29 @@ for $n\geq 4$. Furthermore, $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^
 因此可以得到 roots 的 complexity,
 
 $$\begin{align*}
-\underbrace{\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})}_{Roots} &\leq \sum_{j=0}^{\log_2 n - 1} c^j g(n) + O(1) \\
-&\leq  g(n) \sum^{\log_2 n -1}_{j=0} c^j + O(1)\\
-&= g(n) (\frac{1\cdot(1-c^{\log_2 n - 1})}{1-c}) + O(1) \\
+\underbrace{\sum_{j=0}^{\lfloor \log_2 n - 1 \rfloor} 2^j g(\frac{n}{2^j})}_{Roots} &\leq \sum_{j=0}^{\lfloor \log_2 n - 1 \rfloor} c^j g(n) + O(1) \\
+&\leq  g(n) \sum^{\lfloor \log_2 n - 1 \rfloor}_{j=0} c^j + O(1)\\
+&= g(n) (\frac{1\cdot(1-c^{\lfloor \log_2 n - 1 \rfloor})}{1-c}) + O(1) \\
 &= O(g(n))
 \end{align*}$$
 
 for $n>2$ and $c<1$. On the other hand, we can also find a lower bound by letting $c<\frac{1}{2}$ and $n>4$. Therefore
 
-$$\underbrace{\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})}_{Roots} = \Theta(g(n))$$
+$$\underbrace{\sum_{j=0}^{\lfloor \log_2 n - 1 \rfloor} 2^j g(\frac{n}{2^j})}_{Roots} = \Theta(g(n))$$
+
+Finally we get,
+
+$$\begin{align*}
+f(n) &= \Theta(n) + \Theta(n\log n) \\
+     &= \Theta(n(\log(n))_{\#}
+\end{align*}$$
+
+
+10. (Bonus 10pts) 
+
+
+
+
 
 ## Code
 
@@ -259,6 +265,6 @@ $$
 [^log]: $b^{\log_b p} = p$. see [log equalities](https://ducdoan.com/wp-content/uploads/2018/12/2.jpg).
 [^ITA_1154]:  Introduction to Algorithms, Third Edition. **pp.1154-1156**.
 [^log]: How to prove $\log n! = \Theta(n\log n)$. [[tutorial](http://www.mcs.sdsmt.edu/ecorwin/cs372/handouts/theta_n_factorial.htm)]
-[^master_tree]: Introduction to Algorithms, Third Edition. **pp.99**
+[^master_tree]: Introduction to Algorithms, Third Edition. Chapter 4 Divide-and-Conquer. **pp.104**
 [^xpx]: $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = 2$. Becuase both nominator and denominator approach to infinity as $n \rightarrow \infty$. We can use [L'Hospital's Rule](https://en.wikipedia.org/wiki/L%27H%C3%B4pital%27s_rule). $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = \lim_{n\rightarrow \infty} \frac{log(n^n/2)'}{log(n^{n/2})'}$. Later on, $\frac{d \log(n^n/2)}{dn} = \frac{1}{2}\log(n^n)'$[^lhos]; $\frac{d \log(\frac{n^n}{2})}{dn} = \log(n^n)'$ . Therefore, $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = 2$
 [^lhos]: $(x^x)' = x^x (\log(x) + 1)$. [[proof](https://jakubmarian.com/derivative-of-xx/)]
