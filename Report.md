@@ -11,15 +11,15 @@ puppeteer:
 
 ## Problem 1
 
-### 1. (5pt)
+##### 1. (5pt)
 
 - loop 執行次數大約為 $n$ 次, 為線性關係, 故複雜度為 $O(n)$
 
-### 2. (5pt)
+##### 2. (5pt)
 
 - 執行次數大約為 $log_{2}(n) - 1$ (例如 $8=2^3=2\times \underbrace{2\times 2}_{2次}$). 因此複雜度為 $O(log(n))$ 
 
-### 3. (10pt)
+##### 3. (10pt)
 
 Time complexity of recurive functions [^master]
 
@@ -34,7 +34,7 @@ $$
 $$
 
 
-### 4. (10pt)
+##### 4. (10pt)
 
 Becsue $f(n)$ and $g(n)$ are positively define for $n$ as a positive integer:
 
@@ -54,7 +54,7 @@ for all $n\geq 1$. Therefore, the euqlity holds by applying the definition of $\
 
 
 
-### 5. (10pt)
+##### 5. (10pt)
 
 Because $f(n) = O(i(n))$ and $g(n) = O(j(n))$, there exist two integers $n_1$, $n_2$ and two constants $c_1$, $c_2$ that satisfy the inequalities:
 
@@ -71,13 +71,13 @@ $$f(n) \cdot g(n) \leq c_1 i(n) \cdot c_2 j(n) \leq c_0 i(n)j(n)$$
 
 for all $n\geq n_0$. Thus $f(n)\cdot g(n) \leq O(i(n)\cdot j(n))_{\#}$ [^prop_o].
 
-### 6. (10pt)
+##### 6. (10pt)
 
 The statement is **false**. Here is a contradictory  example:
 
 Let $f(n) = 2 \log_{2} n$ ; $g(n) = \log_{2} n$. This example satisfy the condition, $f(n) = O(g(n))$. However, when apply this example in the power of 2. We can find that $2^{f(n)} = 2^{ 2 \log_{2} n} = n^2$, and $2^{g(n)} = n$[^log]. Therefore, in this case, $2^{f(n)} \notin O(2^{g(n)})_{\#}$.
 
-### 7. (10pt) The harmonic series
+##### 7. (10pt) The harmonic series
 
 Strategy: **Approximation by Integrals** [^ITA_1154]
 
@@ -116,7 +116,7 @@ for all $n>e$. By $\Theta$ notatoin: $\sum^{n}_{k=1} \frac{1}{k} = \Theta(\ln n)
 
 
 
-### 8. (10pts) $\log(n!) = \Theta(n\log n)$
+##### 8. (10pts) $\log(n!) = \Theta(n\log n)$
 
 The equation can be expanded
 
@@ -176,7 +176,7 @@ $$0\leq \frac{1}{4}n\log(n) \leq \log(n!) \leq n\log(n)$$
 for all $n\geq 4$. The $\Theta(n!) = n\log(n)_{\#}$
 
 
-## 9. (10pts)
+##### 9. (10pts)
 
 令 $g(n) = n\log n$.
 每一個 $f(n)$ 都會產生 $2$ 個 $f(n-1)$. 直到  $\lfloor \frac{n}{2} \rfloor = 1$ 總計會產生 $n^{\log_2 2}$ 個 $\Theta(1)$ operations 在 leaves. 在分支的過程中, 會產生 $\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})$ 個 operation 在 roots[^master_tree]. 所以可以得到以下關係
@@ -226,10 +226,18 @@ f(n) &= \Theta(n) + \Theta(n\log n) \\
 \end{align*}$$
 
 
-10. (Bonus 10pts) 
+##### 10. (Bonus 10pts) 
+因為 $f_k(n) = O(n^2)$, 所以可以找到 $c>0$ 滿足 $f_k(n) \leq c \cdot n^2$.
+$$\sum_{k=1}^{n}f_k(n) = \underbrace{f_1(n) +\cdots + f_n(n)}_{n} \leq n\cdot c\cdot n^2 = O(n^3) $$
 
 
+##### 11. (Bonus 10pts)
 
+證明 $k=$ Euclidean algorithm $gcd(m,n)$ 的遞迴次數, 而且 $m>n$. 則 $y\geq F_k$, $F_k$ 是 $k^{th}$ Fibonacci number [^gcd3].
+
+分析三個相連的步驟 $(m_{k+1}, n_{k+1})$, $(m_{k}, n_{k})$, $(m_{k-1}, n_{k-1})$. 則 $m_k = n_{k+1}$, $m_{k-1} = n_k$. 此外, $n_{k-1} = m_k~mod~n_k$, 所以 $m_k = q\cdot n_k + n_{k-1} $ 且 $q\geq 1$. 所以 $n_{k+1} \geq n_k + n_{k-1}$ 形成 Finbonacci 的不等式[^gcd]. 
+
+而 $F_k \approx \frac{(\frac{1+\sqrt{5}}{2})^k}{\sqrt{5}}$[^gcd]. 所以 $k = c\cdot \log(F_k) \leq O(log(m+n))_{\#}$
 
 
 ## Code
@@ -268,3 +276,6 @@ $$
 [^master_tree]: Introduction to Algorithms, Third Edition. Chapter 4 Divide-and-Conquer. **pp.104**
 [^xpx]: $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = 2$. Becuase both nominator and denominator approach to infinity as $n \rightarrow \infty$. We can use [L'Hospital's Rule](https://en.wikipedia.org/wiki/L%27H%C3%B4pital%27s_rule). $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = \lim_{n\rightarrow \infty} \frac{log(n^n/2)'}{log(n^{n/2})'}$. Later on, $\frac{d \log(n^n/2)}{dn} = \frac{1}{2}\log(n^n)'$[^lhos]; $\frac{d \log(\frac{n^n}{2})}{dn} = \log(n^n)'$ . Therefore, $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = 2$
 [^lhos]: $(x^x)' = x^x (\log(x) + 1)$. [[proof](https://jakubmarian.com/derivative-of-xx/)]
+[^gcd]: Euclidean algorithm. [[link](https://codility.com/media/train/10-Gcd.pdf)]
+[^gcd2]: Euclidean algorithm for computing the greatest common divisor. [[link](https://cp-algorithms.com/algebra/euclid-algorithm.html)]
+[^gcd3]: Lame's Theorem. [[link](https://www.nitt.edu/home/academics/departments/cse/faculty/kvi/Euclidean%20algorithm%20for%20gcd.pdf)]
