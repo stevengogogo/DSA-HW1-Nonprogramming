@@ -154,14 +154,14 @@ We need to find a $c$ that fullfills the following inequality:
 $$c\cdot n\log(n) \leq \frac{n}{2}\log(\frac{n}{2}) $$
 
 
-For $n\geq 4$,
+For $n\geq 4$ [^log],
 
 $$\begin{align*}
   \log n &\geq 2 \\
   \frac{1}{4} \log n   &\geq  \frac{1}{2} \\
   \frac{1}{4} \log n - \frac{1}{2} &\geq 0 \\
   \frac{1}{4} n \log n - \frac{1}{2} n &\geq 0 
-\end{align*}$$
+\end{align*}$$ 
 
 Add $\frac{1}{4}n\log n$ on both sides:
 
@@ -186,6 +186,45 @@ for all $n\geq 4$. The $\Theta(n!) = n\log(n)_{\#}$
 
 ## 9. (10pts)
 
+令 $g(n) = n\log n$.
+每一個 $f(n)$ 都會產生 $2$ 個 $f(n-1)$. 直到  $\lfloor \frac{n}{2} \rfloor = 1$ 總計會產生 $n^{\log_2 2}$ 個 $\Theta(1)$ operations 在 leaves. 在分支的過程中, 會產生 $\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})$ 個 operation 在 roots[^master_tree]. 所以可以得到以下關係
+
+$$f(n) = \underbrace{\Theta(n^{\log_2 2})}_{Leaves} + \underbrace{\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})}_{Roots}$$
+
+
+已知 $g(n) = \Theta(n\log n)$, 接下來比較 $2 g(\frac{n}{2})$ 和 $g(n)$ 的 complexity:
+
+
+$$\begin{align*}
+  2 g(\frac{n}{2}) &= 2 \cdot \frac{n}{2} \cdot \log(\frac{n}{2}) \\
+                   &= n \cdot \log(\frac{n}{2}) \\
+                   &= n \cdot (\log(n) - 1) \\
+                   &< \underbrace{n\cdot \log(n)}_{=g(n)}
+\end{align*}$$ 
+
+for all $n>2$, 可以找到 $c<1$ 滿足 $2 g(\frac{n}{2}) < c\cdot g(n)$ 
+
+另外下界可以用,
+
+$$\begin{align*}
+  2g(\frac{n}{2}) = log(\frac{n^n}{2}) & \geq log(n^{n/2}) \\
+                                       & = \frac{1}{2} n\cdot \log(n)
+\end{align*}$$ 
+
+for $n\geq 4$. Furthermore, $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = 2$ [^xpx]. Therefore, $2g(\frac{n}{2}) = \Theta(g(n))$
+
+因此可以得到 roots 的 complexity,
+
+$$\begin{align*}
+\underbrace{\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})}_{Roots} &\leq \sum_{j=0}^{\log_2 n - 1} c^j g(n) + O(1) \\
+&\leq  g(n) \sum^{\log_2 n -1}_{j=0} c^j + O(1)\\
+&= g(n) (\frac{1\cdot(1-c^{\log_2 n - 1})}{1-c}) + O(1) \\
+&= O(g(n))
+\end{align*}$$
+
+for $n>2$ and $c<1$. On the other hand, we can also find a lower bound by letting $c<\frac{1}{2}$ and $n>4$. Therefore
+
+$$\underbrace{\sum_{j=0}^{\log_2 n - 1} 2^j g(\frac{n}{2^j})}_{Roots} = \Theta(g(n))$$
 
 ## Code
 
@@ -215,7 +254,11 @@ $$
 
 
 [^master]: Time complexity of recursive functions [Master theorem]. https://yourbasic.org/algorithms/time-complexity-recursive-functions/
-[^ITA_theta]: Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (n.d.). Introduction to Algorithms, Third Edition. pp.44-47
+[^ITA_theta]: Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (n.d.). Introduction to Algorithms, Third Edition. **pp.44-47**
 [^prop_o]: Properties of Big-O. Data Structures and Algorithms with Object-Oriented Design Patterns in Java. [[Link](https://book.huihoo.com/data-structures-and-algorithms-with-object-oriented-design-patterns-in-java/html/page62.html)]
 [^log]: $b^{\log_b p} = p$. see [log equalities](https://ducdoan.com/wp-content/uploads/2018/12/2.jpg).
-[^ITA_1154]: Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (n.d.). Introduction to Algorithms, Third Edition. pp.1154-1156.
+[^ITA_1154]:  Introduction to Algorithms, Third Edition. **pp.1154-1156**.
+[^log]: How to prove $\log n! = \Theta(n\log n)$. [[tutorial](http://www.mcs.sdsmt.edu/ecorwin/cs372/handouts/theta_n_factorial.htm)]
+[^master_tree]: Introduction to Algorithms, Third Edition. **pp.99**
+[^xpx]: $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = 2$. Becuase both nominator and denominator approach to infinity as $n \rightarrow \infty$. We can use [L'Hospital's Rule](https://en.wikipedia.org/wiki/L%27H%C3%B4pital%27s_rule). $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = \lim_{n\rightarrow \infty} \frac{log(n^n/2)'}{log(n^{n/2})'}$. Later on, $\frac{d \log(n^n/2)}{dn} = \frac{1}{2}\log(n^n)'$[^lhos]; $\frac{d \log(\frac{n^n}{2})}{dn} = \log(n^n)'$ . Therefore, $\lim_{n\rightarrow \infty} \frac{log(n^n/2)}{log(n^{n/2})} = 2$
+[^lhos]: $(x^x)' = x^x (\log(x) + 1)$. [[proof](https://jakubmarian.com/derivative-of-xx/)]
