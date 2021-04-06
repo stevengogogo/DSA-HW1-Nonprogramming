@@ -9,7 +9,7 @@ puppeteer:
 ---
 
 
-## Problem 1
+## Problem 1 - Complexity (80pts + 20pts)
 
 ##### 1. (5pt)
 
@@ -238,6 +238,78 @@ $$\sum_{k=1}^{n}f_k(n) = \underbrace{f_1(n) +\cdots + f_n(n)}_{n} \leq n\cdot c\
 分析三個相連的步驟 $(m_{k+1}, n_{k+1})$, $(m_{k}, n_{k})$, $(m_{k-1}, n_{k-1})$. 則 $m_k = n_{k+1}$, $m_{k-1} = n_k$. 此外, $n_{k-1} = m_k~mod~n_k$, 所以 $m_k = q\cdot n_k + n_{k-1} $ 且 $q\geq 1$. 所以 $n_{k+1} \geq n_k + n_{k-1}$ 形成 Finbonacci 的不等式[^gcd]. 
 
 而 $F_k \approx \frac{(\frac{1+\sqrt{5}}{2})^k}{\sqrt{5}}$[^gcd]. 所以 $k = c\cdot \log(F_k) \leq O(log(m+n))_{\#}$
+
+---
+
+## Problem 2 - Stack / Queue (60pts)
+
+### 1. (10pts)
+
+<img src="img/queue.jpeg" height=100>
+
+```julia {.line-numbers}
+struct Queue
+  head
+  tail
+  array  # Index starts at 0
+  length # Length of array
+end
+
+function init_queue(length)
+  Q = Queue()
+  Q.head = 0
+  Q.tail = 0
+  Q.length = length
+  Q.array = zeros(length) # malloc an array
+  return Q
+end
+
+function enqueue(Q,x)
+  # Check memory
+  next_tail = (Q.tail+1) % Q.length
+
+  if Q.head == next_tail
+    raise OverflowError
+  end
+
+  Q.array[Q.tail] = x
+  Q.tail = next_tail
+end
+
+function dequeue(Q)
+
+  if Q.head == Q.tail
+    raise UnderflowError
+  end
+
+  x = Q.array[Q.head]
+
+  Q.head = (Q.head + 1) % Q.length
+
+  return x
+end
+
+function front(Q)
+  return Q.array[Q.head]
+end
+
+function size(Q)
+  
+  if Q.tail < Q.head
+      s = Q.length - (Q.head - Q.tail)
+  else
+      s = Q.tail - Q.head
+  end
+
+  return s
+end
+
+function reverse(Q)
+  q_tmp = init_queue(2)
+  
+end
+```
+
 
 
 ## Code
