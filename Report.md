@@ -243,9 +243,8 @@ $$\sum_{k=1}^{n}f_k(n) = \underbrace{f_1(n) +\cdots + f_n(n)}_{n} \leq n\cdot c\
 
 ## Problem 2 - Stack / Queue (60pts)
 
-### 1. (10pts)
+##### 1. (10pts)
 
-<img src="img/queue.jpeg" height=100>
 
 ```julia {.line-numbers}
 struct Queue
@@ -305,12 +304,183 @@ function size(Q)
 end
 
 function reverse(Q)
-  q_tmp = init_queue(2)
+  q_tmp = init_queue(2) # Q(1)
   
+  for i in 0:(size(Q)) # Q(n)
+    x = dequeue(Q) # Q(1)
+    enqueue(q_tmp, x) # Q(1)
+
+    x = dequeue(q_tmp) # Q(1)
+    enquque(Q) # Q(1)
+  end
 end
 ```
 
+See design diagram [^queueD]
 
+- Remarks: `reverse`
+  - Emptness of helper queue:
+    - `q_tmp` is initiated as an empty queue. Besides, `enqueue` and `dequque` are paired, which garantee `q_tmp` is empty after the `for loop`
+  - $O(1)$ - extra space
+    - `q_tmp` is initiated with fixed size `2`.
+
+
+##### 2. (10pts)
+
+- `init_queue`: $O(1)$
+- `enqueue(Q,x)`: $O(1)$
+- `dequeue(Q)`: $O(1)$
+- `size`: $O(1)$
+- `reverse` 內的 `for loop` 為一層, 執行次數與資料數 `n` 成正比, 所以是 $O(n) \in O(n^2)$. (見 pseudo code `reverse` 的複雜度註解)
+
+
+##### 3. 
+
+```julia {.line-numbers}
+struct stack
+  array
+  length
+end
+
+struct deque
+  front :: stack
+  back :: stack
+end
+
+# Stack
+function init_stack() # O(1)
+  s = stack()
+  s.length = 0
+  s.array = []
+  return s
+end
+
+function push(s::stack, x) # O(1)
+  s.array[s.length] = x
+  s.length = s.length  + 1
+end
+
+function pop(s::stack) # O(1)
+  x = s.array[s.length - 1]
+  s.length = s.length - 1
+
+  return x
+end
+
+
+# Queue
+function init_deque(q::deque) # O(1)
+  q = deque()
+  q.front = init_stack()
+  q.back = init_stack()
+end
+
+function push_front(q::deque, x) # O(1)
+  push(q.front, x)
+end
+
+function push_back(q::deque, x) # O(1)
+  push(q.back, x)
+end
+
+
+function swap_to_empty(q::deque) # O(n)
+  if (q.front.length == 0)
+    while(q.back.length !=0)
+      x = pop(q.back)
+      push(q.front, x)
+    end
+  else if (q.back.length==0)
+    while(q.front.length !=0)
+      x = pop(q.front)
+      push(q.back, x)
+    end
+  else
+    raise error
+end
+
+function pop_front(q::deque) # max(O(1),  O(n)*2+O(1) )
+  if q.front.length > 0
+    pop(q.front)
+  else
+    swap_to_empty(q)
+    pop(q.front)
+    swap_to_empty(q)
+  end
+end
+
+function pop_back(q::deque) # max(O(1),  O(n)*2+O(1) )
+  if q.back.length > 0
+    pop(q.back)
+  else
+    swap_to_empty(q)
+    pop(q.back)
+    swap_to_empty(q)
+  end
+end
+```
+
+- Deque formed by two stacks
+  <img src="img/dequeue.png">
+- push_front
+  <img src="img/push_front.png">
+- pop_left 
+  <img src="img/pop_left.png">
+
+##### p.4 (5pts)
+
+`push_front` 使用的是 stack 的 `push` . 因此, time complexity 為 $O(1)$
+
+##### p.5 (5pts)
+
+同 `push_front` 使用 stack 的 `push`. Time complexity 為 $O(1)$
+
+##### p.6 (5pts)
+
+如果 `front` stack 還有 element, time complexity 為 stack `pop` 的 $O(1)$. 然和 worst-case 是 `front` 沒有剩下 element, 需要把 `back` 底層的 element pop 出來. 這個 pseudo code 使用的方法是, 把 `back` 一直 `pop`, 且 `push` 到 `front`. 接著 `front` pop 一次, 取得 return 後, 再搬移回去. 這個動作使用了 `while` 需要的 time complexity 為 O(n) 計算如下
+
+
+$$O(\text{pop\_front}(q)) = \begin{cases}
+O(1), \text{q.front.length>0}\\
+\underbrace{O(n)}_{\text{swap to front}} + \underbrace{O(1)}_{\text{pop}} + \underbrace{O(n)}_{\text{swap back}}, \text{q.front.length=0}\\
+\end{cases}$$
+
+而 $O$ 是 worst-case 複雜度, 因此 `pop_front` 的時間雜度為 $O(n)$.
+
+##### p.7 (5pts)
+
+同 `HW2 p.6` 的解釋, time complexity 為 $O(n)$. 
+
+
+##### p.8 (10 pts)
+
+當加入 $n$ 個 `push`, 每當遇到 $3$ 的指數就要執行一次`enlarge` operation ($O(m)$). 因此可以得到在以下次數需要做 `enlarge` [^dymarray]:
+
+$$1,3,9,27,\cdots, 3^{\lfloor \log_{3}n \rfloor}$$
+
+例如當 $n=10$, $3^{\lfloor \log_{3}n \rfloor} = 3^{2}=9$, 就要在 $\{1,3,9\}$ 的時候 `enlarge`. 因此可以得到
+
+|執行次數|執行時間|
+|---|---|
+|$$1,3,9,27,\cdots, 3^{\lfloor \log_{3}n \rfloor}$$|$1c, 3c, 9c, 27c,\cdots, 3^{\lfloor \log_{3}n \rfloor} c$|
+
+$c$ 是常數, 使得 `enlarge` 為 $m\cdot c \in O(m)$.
+
+因此當 `push` $n$ 次,  `enlarge` 所需的總時間 $T$ 為:
+
+$$\begin{align*}
+T &= c\cdot (\underbrace{1+3+\cdots+3^{\lfloor \log_{3}n \rfloor}}_{\lfloor \log_{3}n \rfloor + 1})\\
+  &= c\cdot\frac{1\cdot(1-3^{\lfloor \log_{3}n \rfloor + 1})}{1-3}\\
+  &= c' \cdot (3^{\lfloor \log_{3}n \rfloor})\\  
+  &\leq c' \cdot n \in O(n)
+   \end{align*}$$
+
+除此之外, `createstack` 需要 $O(1)$, `isFullStack` 需要 $O(1)$，因為這些操作沒有考慮到 `m` [^stack].
+
+值得一提的概念是 **amortized analysis**, 在絕大多情況下, `enlarge` 很少發生. 因此對於單次操作而言, 只要沒有遇上 $3$ 的指數的限制下, 就會是 $O(1)$. 然而 $O$ 是最糟情況, 這個問題的複雜度為 $O(n)_{\#}$.
+
+
+---
 
 ## Code
 
@@ -339,6 +509,7 @@ $$
 $$
 
 
+
 [^master]: Time complexity of recursive functions [Master theorem]. https://yourbasic.org/algorithms/time-complexity-recursive-functions/
 [^ITA_theta]: Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (n.d.). Introduction to Algorithms, Third Edition. **pp.44-47**
 [^prop_o]: Properties of Big-O. Data Structures and Algorithms with Object-Oriented Design Patterns in Java. [[Link](https://book.huihoo.com/data-structures-and-algorithms-with-object-oriented-design-patterns-in-java/html/page62.html)]
@@ -351,3 +522,38 @@ $$
 [^gcd]: Euclidean algorithm. [[link](https://codility.com/media/train/10-Gcd.pdf)]
 [^gcd2]: Euclidean algorithm for computing the greatest common divisor. [[link](https://cp-algorithms.com/algebra/euclid-algorithm.html)]
 [^gcd3]: Lame's Theorem. [[link](https://www.nitt.edu/home/academics/departments/cse/faculty/kvi/Euclidean%20algorithm%20for%20gcd.pdf)]
+[^queueD]: Design diagram of reversing a queue with a temporary queue. Noted that the initial queue contains `[3,2,1]` with `1` at the front.
+<img src="./reverse_queue.png" height=1000>
+[^dymarray]: Dynamic Array Amortized Analysis. [[link](https://www.interviewcake.com/concept/java/dynamic-array-amortized-analysis)]
+[^stack]: Implementation of a dynamic stack
+    ```c {.line-numbers}
+    struct Stack {
+    int top;
+    int capacity;
+    int *arr;
+    }
+
+    struct Stack *createStack() { // O(1)
+    struct Stack *S = malloc(sizeof(struct Stack));
+    S->capacity = 1;
+    S->top = -1;
+    S->arr = (int*)malloc(S->capacity * sizeof(int));
+    return S;
+    }
+
+    int isFullStack(struct Stack *S) { // O(1)
+    return (S->top == S->capacity-1);
+    }
+
+    void enlarge(struct Stack *S) { // O(3*m)
+    int new_capacity = (S->capacity * 3);
+    S->capacity = new_capacity;
+    S->arr = (int*)realloc(S->arr, new_capacity * sizeof(int));
+    }
+
+    void push(struct Stack *S, int data) {
+    S->arr[++S->top] = data; // O(1)
+    if (isFullStack(S))
+      enlarge(S);
+    }
+    ```
