@@ -228,16 +228,44 @@ f(n) &= \Theta(n) + \Theta(n\log n) \\
 
 ##### 10. (Bonus 10pts) 
 因為 $f_k(n) = O(n^2)$, 所以可以找到 $c>0$ 滿足 $f_k(n) \leq c \cdot n^2$.
-$$\sum_{k=1}^{n}f_k(n) = \underbrace{f_1(n) +\cdots + f_n(n)}_{n} \leq n\cdot c\cdot n^2 = O(n^3) $$
 
+$$\begin{align*}
+\sum_{k=1}^{n}f_k(n) = \underbrace{f_1(n) +\cdots + f_n(n)}_{n} &\leq c_1n^2 + c_2n^2 + \cdots + c_nn^2 \\
+ &= (c_1+\cdots+c_n)n^2\\
+ &\leq n\cdot \max(c_1,\cdots,c_n) \cdot n^2 \\
+ &= n^3 \cdot \max(c_1, \cdots, c_n) \\
+ &= O(n^3)
+\end{align*}$$
+
+令 $c_{i}$ 為常數, 滿足 $f_{i}(n) \leq c_{i}n^2$. $i\in\{1,\cdots,n\}$
 
 ##### 11. (Bonus 10pts)
 
 證明 $k=$ Euclidean algorithm $gcd(m,n)$ 的遞迴次數, 而且 $m>n$. 則 $y\geq F_k$, $F_k$ 是 $k^{th}$ Fibonacci number [^gcd3].
 
+
+**Section 1: GCD 和 Fibonacci**
+
 分析三個相連的步驟 $(m_{k+1}, n_{k+1})$, $(m_{k}, n_{k})$, $(m_{k-1}, n_{k-1})$. 則 $m_k = n_{k+1}$, $m_{k-1} = n_k$. 此外, $n_{k-1} = m_k~mod~n_k$, 所以 $m_k = q\cdot n_k + n_{k-1} $ 且 $q\geq 1$. 所以 $n_{k+1} \geq n_k + n_{k-1}$ 形成 Finbonacci 的不等式[^gcd]. 
 
-而 $F_k \approx \frac{(\frac{1+\sqrt{5}}{2})^k}{\sqrt{5}}$[^gcd]. 所以 $k = c\cdot \log(F_k) \leq O(log(m+n))_{\#}$
+而 $F_k \approx \frac{(\frac{1+\sqrt{5}}{2})^k}{\sqrt{5}}$[^gcd] (Section 2). 所以 $k = c\cdot \log(F_k) \leq O(log(m+n))_{\#}$
+
+**Section 2: Fibonacci 的通式**
+
+Fibonacci 數列是一個線性空間 (兩個 Fibonacci 數列 相加或相乘都是 Fibonacci[^fib])。 在這個定理基礎下，尋找等比的 Fibonacci series:
+
+$$\begin{align}
+  a_{n-2} \times r &= a_{n-1} \\
+  a_{n-1} \times r &= a_n \\
+  a_{n-2} + a_{n-1} &= a_n
+\end{align}$$
+
+結合上述三項性質，將前兩項帶入最後一項，得到
+
+$$r^2 -r -1 =0$$
+
+得到 $r$ 的兩個根為實根 $\alpha$ 和 $\beta$ , 代表可以找到 $a_{k} = p \alpha^{k-1} + q \beta^{k-1}$, 其中 $p$ 和 $q$ 可以用起始條件確定如($a_{1}=1$, $a_{2}=1$)
+
 
 ---
 
@@ -557,3 +585,4 @@ $$
       enlarge(S);
     }
     ```
+  [^fib]: 費波那契數列. [[PDF](http://www.hwsh.tc.edu.tw/ischool/public/resource_view/open.php?file=b38c393be59da9b7e5acb45bde07b8c7.pdf)]
