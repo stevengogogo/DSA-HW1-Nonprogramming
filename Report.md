@@ -507,6 +507,94 @@ T &= c\cdot (\underbrace{1+3+\cdots+3^{\lfloor \log_{3}n \rfloor}}_{\lfloor \log
 
 值得一提的概念是 **amortized analysis**, 在絕大多情況下, `enlarge` 很少發生. 因此對於單次操作而言, 只要沒有遇上 $3$ 的指數的限制下, 就會是 $O(1)$. 然而 $O$ 是最糟情況, 這個問題的複雜度為 $O(n)_{\#}$.
 
+## Problem 3 - Array / Linked Lists (60pts)
+
+### 1. (15pts)
+
+```julia {.line-numbers}
+function is_jumping_forever(A, i_init)
+
+  A_record = fill(False, length(A)) # Initiate record array with False
+
+  i = i_init
+  is_forever = False
+
+  while (A_record[i] != True)
+
+    if (A[i] == i)
+      break
+    else 
+      A_record[i] = True
+      i = A[i]
+    end
+
+  end
+
+  is_forever = (A_record[i] == True) ? True : False
+
+  return is_forever
+  end
+end
+```
+
+**Workflow**
+
+只要
+
+1. 展開一條一樣長度的 Array, 全部填滿 `False`
+2. `While loop` : 
+   1. 從起始點開始走, 如果遇到 `A[i]=i` 就跳出
+   2. 如果 `A[i] != i`, 紀錄走過的地方在 `A_record[i]` 標記 `True`
+   - 每次迴圈開始要件, 不能走過被標記過的點
+3. 回傳: 如果最後一步是走過的, 代表已達終點; 反之, 如果最後一步是 `True` 則代表會 jump forever.
+
+**Time and Space Complexity**
+
+- Time complexity
+  - $O(n)$: 最糟情況是跳到全部的 elements 才回來, 也就是 `while loop` 執行了 `n` 次
+- Space complexity
+  - $\Theta(n)$: 使用了一樣長度的 array 和固定大小的 temporary variables.
+
+### 2. (15pts)
+
+```julia {.line-numbers}
+function loop_size(A, i_init)
+
+  A_record = fill(-1, length(A)) # Initiate record array with -1
+
+  i = i_init
+  num_step = 0
+  is_forever = False
+
+  while (A_record[i] == -1)
+      A_record[i] = num_step
+      i = A[i]
+      num_step+=1
+  end
+
+  loop_size = num_step - A_record[i]
+
+  return loop_size
+  end
+end
+```
+
+
+**Workflow**
+
+1. 建立一個 `record array`。預設值為-1
+2. 迴圈: 每走一步, 紀錄當下的步數在 `record array`
+3. 如果遇到的點已經被記錄, 跳出迴圈
+4. 將當下的步數減掉上次來的步數, 得到 `loop` 的長度
+
+![](img/frog_jump.png)
+
+**Time and Space Complexity**
+
+- Time Complexity
+  - $O(n)$: 需要走完一次的迴圈, 迴圈最大可以是 array 的長度 `n`
+- Space complexity
+  - $\Theta(n)$: 需要產生一樣長度的 `record array` 長度為 `n`, 再加上其他常數記憶體用量.
 
 ---
 
