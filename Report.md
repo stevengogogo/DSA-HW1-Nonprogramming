@@ -596,6 +596,52 @@ end
 - Space complexity
   - $\Theta(n)$: 需要產生一樣長度的 `record array` 長度為 `n`, 再加上其他常數記憶體用量.
 
+
+### 3. (15pts)
+
+**分析**
+
+因為是求中位數, 可以知道 
+
+$$\begin{align*}
+\max(M_{0,i}, M_{i,j}, M_{j,n}) &= M_{j,n} \\
+\min(M_{0,i}, M_{i,j}, M_{j,n}) &= M_{0,i}
+\end{align*}$$
+
+所以 $M_{i,j}$ 越小越好, 也就是 $\min~f$ 發生在 $j=i+1$ 時, 接下來要尋找的就是在 $n-3$ 的空間中找到最適當的斷點. 接著使用 線性 尋找 $O(n)$, 朝 minimium 前進. 記憶體佔用為 $O(h)$ 用來存放 array. 使用 array 查找 median 為常數時間. 
+
+
+```julia {.line-numbers}
+# Find i, j 
+
+function GetMedian(arr, s, t)
+    if (s+t)/2 is odd
+      return arr[(s+t)/2]
+    else
+      return (arr[s+t/2] + arr[s+t/2 + 1])/2
+    end
+end
+
+function find_ij(arr)
+  f = maximum(arr) # default value of f
+  I = 0 # default i
+  for i in 1 : (length(arr)-1 - 2) #last three elements
+    m0 = GetMedian(arr, 0, i)
+    m1 = arr[i+1] #minimum length of [i,j)
+    m2 = GetMedian(arr, i+2, length(arr)-1)
+
+    f_candidate = m2 - m0
+
+    if (f_candidate < f)
+      f = f_candidate
+      I = i #update new I
+    end
+  end
+  return I, I+1 # i, j
+end
+```
+
+
 ---
 
 ## Code
