@@ -641,34 +641,74 @@ function find_ij(arr)
 end
 ```
 
+### 4. (15pts) Circular linked list
 
----
+假設一個遞增序列
 
-## Code
+$$a_{n}\rightarrow a_{n-1}\rightarrow \cdots\rightarrow a_{1}$$
 
-### H3
-#### H4
-##### H5
-###### H6
+滿足 $a_{i} < a_{j}$ 當 $i<j$. 因為排序好的序列在 circular linked list 會使 $a_{1} \rightarrow a_{n}$ 產生一個 decreasing node. 將 circular linked list 遞增排序的步驟:
+
+1. 找到 decreasing nodes ($O(n)$), 把他們從 circular 切出來, 將 previous node 和 next node 連起來 ($O(1)$)
+2. 找到 minimum bigger value ($O(n)$), 將數字切進去 ($O(1)$)
+3. 如果沒有 bigger value, 找到 minimum value 連起來
 
 
-```c  {.line-numbers}
-int a;
+
+```julia {.line-numbers}
+
+function insertSort(head, value)
+    node1 = head
+    node2 = node1.next
+    node3 = node1.next.next
+
+    val = value
+
+    while (node2 != head)
+      
+      if (node2.)
+
+      #move next
+      node1 = node1.next
+      node2 = node2.next
+      ndoe3 = node3.next
+    end
+end
+
+function make_sorted(head::node)
+  node1 = head
+  node2 = node1.next
+  node3 = node1.next.next
+
+  decNodes = []
+
+  while (node2 != head)
+    if (node2.value > node3.value)
+        link(node1 -> node3)
+        append!(decNodes, node2)
+        if (length(decNodes) == 2)
+          break
+        end
+    end
+
+    #move next
+    node1 = node1.next
+    node2 = node2.next
+    ndoe3 = node3.next
+  end
+
+  #rewiring 
+  nodeA, nodeB = decNodes
+
+  #find new cite to wire
+
+
+
+
+end
 ```
 
-## Citation
 
-
-Something important 
-
-## Equations
-
-$$
-\begin{align}
- \lim_{n\rightarrow\infty} \frac{f}{g} &= 0 \\
- &= 3
-\end{align}
-$$
 
 
 
