@@ -1,12 +1,5 @@
----
-puppeteer:
-  landscape: false
-  format: "A4"
-  timeout: 500 # <= Special config, which means waitFor 3000 ms
-  export_on_save:
-    puppeteer: true # export PDF on save
-    puppeteer: ["pdf"] # export PDF and PNG files on save
----
+[![hackmd-github-sync-badge](https://hackmd.io/p1bIKDGDSfKEOnCntsm6MA/badge)](https://hackmd.io/p1bIKDGDSfKEOnCntsm6MA)
+
 
 
 ## Problem 1 - Complexity (80pts + 20pts)
