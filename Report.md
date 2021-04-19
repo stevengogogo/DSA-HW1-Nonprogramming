@@ -1,6 +1,8 @@
 [![hackmd-github-sync-badge](https://hackmd.io/p1bIKDGDSfKEOnCntsm6MA/badge)](https://hackmd.io/p1bIKDGDSfKEOnCntsm6MA)
 
+# Homework 1
 
+Shao-Ting Chiu (r07945001@ntu.edu.tw)
 
 ## Problem 1 - Complexity (80pts + 20pts)
 
